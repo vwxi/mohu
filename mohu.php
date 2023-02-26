@@ -1,10 +1,7 @@
 <?php
 
 /* mohu bbs, by ten */
-/*
- * set up database:
- * sqlite3 mohu.db < create.sql
-*/
+/* MAKE SURE PHP CAN WRITE TO FILES!!! */
 
 ini_set('log_errors', 1);
 ini_set('error_log', '/tmp/mohu.log');
@@ -28,6 +25,32 @@ try {
 	$db = new SQLite3(DBFILENAME);
 } catch(Exception $e) {
 	die("caught exception ".$e->getMessage());
+}
+
+$q = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='".DBPOSTTABLE."'");
+if(!$q->fetchArray()) {
+	$db->exec("CREATE TABLE IF NOT EXISTS ".DBPOSTTABLE." (
+		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		parent INTEGER,
+		time DATETIME DEFAULT CURRENT_TIMESTAMP,
+		ip TEXT,
+		name TEXT,
+		email TEXT,
+		subject TEXT,
+		content TEXT,
+		replies INTEGER DEFAULT 0,
+		frozen INTEGER DEFAULT 0
+	)");
+	echo "made post table. ";
+}
+
+$q = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='".DBBANSTABLE."'");
+if(!$q->fetchArray()) {
+	$db->exec("CREATE TABLE IF NOT EXISTS ".DBBANSTABLE." (
+		ip TEXT NOT NULL,
+		why TEXT
+	)");
+	echo "made bans table. ";
 }
 
 $st = $db->prepare("SELECT * FROM ".DBBANSTABLE." WHERE ip=:ip");
@@ -295,18 +318,24 @@ function reply() {
 	say("congrats! your reply went through");
 }
 
-if($_SERVER['REQUEST_METHOD'] === 'GET') {
-	echo "<html>
+echo "<html>
 <head>
 <meta http-equiv='content-type' content='text/html;charset=shift_jis'>
 <title>".BBSNAME."</title>
-<link rel='stylesheet' href='style.css'>
+<style>
+html {background-color: #eddad2;width: 45%;margin: 0 auto;font-family: 'MS Pgothic', IPAMonaPGothic, Monapo, Mona, serif;}
+textarea {white-space: normal;}
+#newpost, #listing { text-align: center; }
+.postview, .replyview {padding-top: 5px;padding-bottom: 5px;padding-left: 15px;padding-right: 15px;background-color: #efefef;text-align: justify;}
+.frozen-post { color: red; }
+</style>
 </head>
 <body>
 <h1>".BBSTITLE."</h1>
 <hr><br>
 ";
 
+if($_SERVER['REQUEST_METHOD'] === 'GET') {
 	if(isset($_GET['do'])) {
 		switch($_GET['do']) {
 		case 'view':
