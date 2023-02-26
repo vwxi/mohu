@@ -21,34 +21,6 @@ try {
 	die("caught exception ".$e->getMessage());
 }
 
-$q = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='".DBPOSTTABLE."'");
-if(!$q->fetchArray()) {
-	$db->exec("CREATE TABLE ".DBPOSTTABLE." (
-		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		parent INTEGER,
-		time DATETIME DEFAULT CURRENT_TIMESTAMP,
-		ip TEXT,
-		name TEXT,
-		email TEXT,
-		subject TEXT,
-		content TEXT,
-		replies INTEGER DEFAULT 0,
-		frozen INTEGER DEFAULT 0
-		)");
-
-	echo "made post table\n";
-}
-
-$q = $db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='".DBBANSTABLE."'");
-if(!$q->fetchArray()) {
-	$db->exec("CREATE TABLE ".DBBANSTABLE." (
-		ip TEXT NOT NULL,
-		why TEXT
-		)");
-
-	echo "made ban table\n";
-}
-
 $st = $db->prepare("SELECT * FROM ".DBBANSTABLE." WHERE ip=:ip");
 $st->bindValue(":ip", $_SERVER['REMOTE_ADDR']);
 $q = $st->execute();
