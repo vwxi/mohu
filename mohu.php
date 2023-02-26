@@ -229,7 +229,7 @@ function post() {
 	global $db;
 	global $base;
 
-	if(!isset($_POST['subject']) || !isset($_POST['content'])) {
+	if(!isset($_POST['subject']) || !isset($_POST['content']) || empty($_POST['subject']) || ctype_space($_POST['subject'])) {
 		say("your post did not go through");
 	}
 
