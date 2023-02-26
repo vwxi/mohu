@@ -116,7 +116,7 @@ str_repeat("&nbsp;",2)."-".str_repeat("&nbsp;",2)."<b>".$subject."</b><br>
 	if($frozen === 0) {
 		echo "
 <br>
-<form class='reply' id='reply-".$id_."' action='/mohu.php' method='post'>
+<form class='reply' id='reply-".$id_."' action='".$base."' method='post'>
 reply to this post:<br><br>
 <label for='name'>name: </label>
 <input type='text' placeholder='anonymous' name='name' value='anonymous'>
@@ -169,7 +169,7 @@ function preview_posts() {
 function post_form() {
 	echo "
 <br>
-<form id='newpost' action='/mohu.php' method='post'>
+<form id='newpost' action='".$base."' method='post'>
 <label for='subject'>subject: </label>
 <input type='text' name='subject' size='45'>
 <input type='submit' value='post'><br>
