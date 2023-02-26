@@ -1,6 +1,10 @@
 <?php
 
 /* mohu bbs, by ten */
+/*
+ * set up database:
+ * sqlite3 mohu.db < create.sql
+*/
 
 ini_set('log_errors', 1);
 ini_set('error_log', '/tmp/mohu.log');
@@ -12,7 +16,7 @@ define('DBPOSTTABLE', 'posts');
 define('DBBANSTABLE', 'bans');
 
 define('BBSNAME', 'mohu BBS');
-define('BBSTITLE', "ephie-tan's fan club");
+define('BBSTITLE', "very important posters' club");
 
 define('PREVIEW', 10);
 define('MAXPOSTS', 50);
@@ -89,9 +93,9 @@ function view($id, $preview = false) {
 
 	echo removeget(removeget($_SERVER["REQUEST_URI"],"quote"),"rquote").(($preview)?"?":"&")."quote=".$id_;
 	echo "'><b>".$id_."</b></a>, ".$rn.
-str_repeat("&nbsp;",2)."-".str_repeat("&nbsp;",2)."<b>".$subject."</b><br>
-".$time."</p>
-<p>".$content."</p>";
+str_repeat("&nbsp;",2)."-".str_repeat("&nbsp;",2)."<b>".$subject."</b>".
+((!isset($_GET['do'])) ? str_repeat("&nbsp;",2)."<a href='".$base."?do=view&id=".$id_."'>[see full post]</a>" : "").
+"<br>".$time."</p><p>".$content."</p>";
 
 	echo "<div class='postreplies'>";
 
