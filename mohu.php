@@ -15,6 +15,8 @@ define('PREVIEW', 10);
 define('MAXPOSTS', 5);
 define('MAXREPLIES', 3);
 
+$base = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
 try {
 	$db = new SQLite3(DBFILENAME);
 } catch(Exception $e) {
@@ -30,7 +32,7 @@ if($res = $q->fetchArray()) {
 }
 
 function say($m) {
-	echo "<h3>".$m."</h3><a href=".basename(__FILE__).">let's go back</a>";
+	echo "<h3>".$m."</h3><a href=".$base.">let's go back</a>";
 	die(0);
 }
 
@@ -39,7 +41,7 @@ function subquotes($s) {
 	preg_match_all("/&gt;&gt;[0-9]{1,}/", $s, $matches);
 	foreach($matches[0] as $m) {
 		$num = substr($m, 8);
-		$nstr = "<a href='".basename(__FILE__)."?do=view&id=".$num."'>".$m."</a>";
+		$nstr = "<a href='".$base."?do=view&id=".$num."'>".$m."</a>";
 		$s = str_replace($m, $nstr, $s);
 	}
 
@@ -104,7 +106,7 @@ str_repeat("&nbsp;",2)."-".str_repeat("&nbsp;",2)."<b>".$subject."</b><br>
 <p><a title='quote this reply' href='";
 		echo removeget(removeget($_SERVER["REQUEST_URI"],"quote"),"rquote")."&quote=".$id_."&rquote=".$id;
 		echo "'><b>".$id."</b></a>, ".$rn."
-<a title='open and reply' href='".basename(__FILE__)."?do=view&id=".$id."'>[reply]</a><br>".$time."</p>
+<a title='open and reply' href='".$base."?do=view&id=".$id."'>[reply]</a><br>".$time."</p>
 <p>".$content."</p>
 </div>";
 	}
@@ -153,7 +155,7 @@ function preview_posts() {
 	$q->reset();
 	echo "<hr><br><div id='listing'>";
 	while($row = $q->fetchArray()) {
-		echo "<a href='".basename(__FILE__)."?do=view&id=".
+		echo "<a href='".$base."?do=view&id=".
 			$row["id"]."'>".$row["subject"]." (".$row["replies"].")</a> ";
 	}
 	echo "</div><br><hr><br>";
