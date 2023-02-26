@@ -2,6 +2,9 @@
 
 /* mohu bbs, by ten */
 
+ini_set('log_errors', 1);
+ini_set('error_log', '/tmp/mohu.log');
+
 define('VERSION', '1.0.0');
 
 define('DBFILENAME', 'mohu.db');
