@@ -32,11 +32,15 @@ if($res = $q->fetchArray()) {
 }
 
 function say($m) {
+	global $base;
+	
 	echo "<h3>".$m."</h3><a href=".$base.">let's go back</a>";
 	die(0);
 }
 
 function subquotes($s) {
+	global $base;
+
 	$matches = array();
 	preg_match_all("/&gt;&gt;[0-9]{1,}/", $s, $matches);
 	foreach($matches[0] as $m) {
@@ -60,6 +64,8 @@ function removeget($url, $varname) {
 
 function view($id, $preview = false) {
 	global $db;
+	global $base;
+
 	$st = $db->prepare("SELECT * FROM ".DBPOSTTABLE." WHERE id=:id");
 	$st->bindValue(':id', $id, SQLITE3_INTEGER);
 	$q = $st->execute();
@@ -146,6 +152,8 @@ reply to this post:<br><br>
 
 function preview_posts() {
 	global $db;
+	global $base;
+
 	$q = $db->query("SELECT * FROM ".DBPOSTTABLE." WHERE parent IS NULL ORDER BY time DESC");
 	if(!$q->fetchArray()) {
 		echo "<h2><b>no posts to preview!</b></h2>";
@@ -167,6 +175,8 @@ function preview_posts() {
 }
 
 function post_form() {
+	global $base;
+
 	echo "
 <br>
 <form id='newpost' action='".$base."' method='post'>
@@ -187,6 +197,7 @@ function post_form() {
 
 function post() {
 	global $db;
+	global $base;
 
 	if(!isset($_POST['subject']) || !isset($_POST['content'])) {
 		say("your post did not go through");
@@ -215,6 +226,7 @@ function post() {
 
 function reply() {
 	global $db;
+	global $base;
 
 	if(!isset($_POST['id']) || !isset($_POST['name']) || !isset($_POST['content'])) {
 		say("your reply did not go through");
