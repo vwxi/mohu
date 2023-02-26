@@ -1,0 +1,28 @@
+html {
+	background-color: #eddad2;
+	width: 45%;
+	margin: 0 auto;
+	font-family: 'MS Pgothic', IPAMonaPGothic, Monapo, Mona, serif;
+}
+
+body {
+	
+}
+
+textarea {
+	white-space: normal;
+}
+
+#newpost, #listing { text-align: center; }
+
+.postview, .replyview {
+	padding-top: 5px;
+	padding-bottom: 5px;
+
+	padding-left: 15px;
+	padding-right: 15px;
+	background-color: #efefef;
+	text-align: justify;
+}
+
+.frozen-post { color: red; }
