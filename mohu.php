@@ -15,8 +15,8 @@ define('BBSNAME', 'mohu BBS');
 define('BBSTITLE', "ephie-tan's fan club");
 
 define('PREVIEW', 10);
-define('MAXPOSTS', 5);
-define('MAXREPLIES', 3);
+define('MAXPOSTS', 50);
+define('MAXREPLIES', 50);
 
 $base = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
