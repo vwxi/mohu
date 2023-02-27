@@ -261,7 +261,6 @@ function reply() {
 	global $base;
 
 	if(!isset($_POST['id']) || !isset($_POST['name']) || !isset($_POST['content']) ||	
-		empty($_POST['subject']) || ctype_space($_POST['subject']) ||
 		empty($_POST['content']) || ctype_space($_POST['content'])) {
 		say("your reply did not go through");
 	}
