@@ -114,6 +114,7 @@ function view($id, $preview = false) {
 
 	$rn = ($email !== '') ? "<a href='mailto:".$email."'>".$name."</a>" : $name;
 
+	if(!$preview) echo "<h4><a class='goback' href='".$base."'>go back</a></h4>";
 	echo "
 <div class='postview'>
 <p><a title='quote this post' href='";
@@ -342,7 +343,7 @@ textarea {white-space: normal;}
 </head>
 <body>
 <h1>".BBSTITLE."</h1>
-<hr><br>
+<hr>
 ";
 
 if($_SERVER['REQUEST_METHOD'] === 'GET') {
