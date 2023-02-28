@@ -107,9 +107,12 @@ function view($id, $preview = false) {
 	$q->reset();
 	list($id_,$parent,$time,,$name,$email,$subject,$content,,$frozen) = $q->fetchArray();
 
-	$rn = ($email !== '') ? "<a href='mailto:".$email."'>".$name."</a>" : $name;
+	$subject = htmlentities($subject, ENT_QUOTES, 'UTF-8');
 	$content = nl2br(htmlentities($content, ENT_QUOTES, 'UTF-8'));
-		
+	$email = htmlentities($email, ENT_QUOTES, 'UTF-8');
+
+	$rn = ($email !== '') ? "<a href='mailto:".$email."'>".$name."</a>" : $name;
+
 	echo "
 <div class='postview'>
 <p><a title='quote this post' href='";
@@ -134,6 +137,7 @@ str_repeat("&nbsp;",2)."-".str_repeat("&nbsp;",2)."<b>".$subject."</b>".
 		list($id,,$time,,$name,$email,,$content,,,) = $row;
 
 		$content = subquotes(nl2br(htmlentities($content, ENT_QUOTES, 'UTF-8')));
+		$email = htmlentities($email, ENT_QUOTES, 'UTF-8');
 
 		$rn = ($email !== '') ? "<a href='mailto:".$email."'>".$name."</a>" : $name;
 
@@ -193,8 +197,9 @@ function preview_posts() {
 	$q->reset();
 	echo "<hr><br><div id='listing'>";
 	while($row = $q->fetchArray()) {
+		$subject = htmlentities($row["subject"], ENT_QUOTES, 'UTF-8');
 		echo "<a href='".$base."?do=view&id=".
-			$row["id"]."'>".$row["subject"]." (".$row["replies"].")</a> ";
+			$row["id"]."'>".$subject." (".$row["replies"].")</a> ";
 	}
 	echo "</div><br><hr><br>";
 
