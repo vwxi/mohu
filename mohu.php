@@ -107,6 +107,7 @@ function view($id, $preview = false) {
 	$q->reset();
 	list($id_,$parent,$time,,$name,$email,$subject,$content,,$frozen) = $q->fetchArray();
 
+	$name = htmlentities($name, ENT_QUOTES, 'UTF-8');
 	$subject = htmlentities($subject, ENT_QUOTES, 'UTF-8');
 	$content = nl2br(htmlentities($content, ENT_QUOTES, 'UTF-8'));
 	$email = htmlentities($email, ENT_QUOTES, 'UTF-8');
@@ -136,6 +137,7 @@ str_repeat("&nbsp;",2)."-".str_repeat("&nbsp;",2)."<b>".$subject."</b>".
 	while($row = $q->fetchArray()) {
 		list($id,,$time,,$name,$email,,$content,,,) = $row;
 
+		$name = htmlentities($name, ENT_QUOTES, 'UTF-8');
 		$content = subquotes(nl2br(htmlentities($content, ENT_QUOTES, 'UTF-8')));
 		$email = htmlentities($email, ENT_QUOTES, 'UTF-8');
 
