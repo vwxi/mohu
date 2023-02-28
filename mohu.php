@@ -122,7 +122,7 @@ function view($id, $preview = false) {
 
 	$rn = ($email !== '') ? "<a href='mailto:".$email."'>".$name."</a>" : $name;
 
-	if(!$preview) echo "<h4><a class='goback' href='./'>go back</a></h4>";
+	if(!$preview) echo "<h4><a class='goback' href='".$base."'>go back</a></h4>";
 	echo "
 <div class='postview'>
 <p><a title='quote this post' href='";
