@@ -21,6 +21,13 @@ define('MAXREPLIES', 50);
 
 $base = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+session_start();
+if(empty($_SESSION['token'])) {
+	$_SESSION['token'] = bin2hex(random_bytes(32));
+}
+
+$token = $_SESSION['token'];
+
 try {
 	$db = new SQLite3(DBFILENAME);
 } catch(Exception $e) {
@@ -95,6 +102,7 @@ function removeget($url, $varname) {
 function view($id, $preview = false) {
 	global $db;
 	global $base;
+	global $token;
 
 	$st = $db->prepare("SELECT * FROM ".DBPOSTTABLE." WHERE id=:id");
 	$st->bindValue(':id', $id, SQLITE3_INTEGER);
@@ -114,7 +122,7 @@ function view($id, $preview = false) {
 
 	$rn = ($email !== '') ? "<a href='mailto:".$email."'>".$name."</a>" : $name;
 
-	if(!$preview) echo "<h4><a class='goback' href='".$base."'>go back</a></h4>";
+	if(!$preview) echo "<h4><a class='goback' href='./'>go back</a></h4>";
 	echo "
 <div class='postview'>
 <p><a title='quote this post' href='";
@@ -167,6 +175,7 @@ reply to this post:<br><br>
 <input type='text' name='email'>
 <input type='submit' value='post'><br>
 <input type='hidden' name='do' value='reply'>
+<input type='hidden' name='token' value='".$token."'>
 <input type='hidden' name='id' value='".(($parent !== null) ? $parent : $id_)."'>
 <textarea form='reply-".$id_."' name='content' placeholder='blah blah...' cols='60' rows='8'>";
 		if(isset($_GET['quote'])) {
@@ -214,6 +223,7 @@ function preview_posts() {
 
 function post_form() {
 	global $base;
+	global $token;
 
 	echo "
 <br>
@@ -226,6 +236,7 @@ function post_form() {
 <label for='email'>email: </label>
 <input type='text' name='email'>
 <input type='hidden' name='do' value='post'>
+<input type='hidden' name='token' value='".$token."'>
 <textarea form='newpost' name='content' placeholder='blah blah...' cols='60' rows='8'></textarea>
 </form>
 ";
@@ -360,6 +371,11 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
 } else if($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if(!isset($_POST['do'])) {
 		echo '<h3>what?</h3>';
+	}
+
+	if(!empty($_POST['token'])) {
+		if(!hash_equals($_SESSION['token'], $_POST['token']))
+			say("csrf shit woot woot");
 	}
 
 	switch($_POST['do']) {
